@@ -4,9 +4,19 @@ import * as Location from 'expo-location';  // Location API
 import { StyleSheet, Text, View, ScrollView, Dimensions, ActivityIndicator} from 'react-native';
 // import { useEffect, useState } from 'react/cjs/react.production.min';
 
+import { Ionicons } from '@expo/vector-icons'; 
+
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 console.log("SCREEN_WIDTH is: ", SCREEN_WIDTH)
+
+const icons = {
+  Clouds:"cloudy",
+  Rain:"rainy",
+  Clear:"sunny",
+  Snow:"md-snow"
+}
+
 
 export default function App() {
   const [city, setCity] = useState("Loading...");
@@ -60,10 +70,14 @@ export default function App() {
           <ActivityIndicator style={{marginTop:10}} color={'white'} size={'large'}/>
         </View>):(
           dailyWeather.map((day, index) => 
-          <View style={styles.day} /* 온도 */ >
-            <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
-            <Text style={styles.description}>{day.weather[0].main}</Text>
-          </View>)
+            <View style={styles.day} /* 온도 */ >
+              <View style={{flexDirection:'row', alignItems:'flex-end', justifyContent:'space-between', width:'90%'}}>
+                <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+                <Ionicons name={icons[day.weather[0].main]} size={128} color="black" />
+              </View>
+              <Text style={styles.description} /* 날씨 설명 */>{day.weather[0].main}</Text>
+            </View>
+          )
         )
         }
       </ScrollView>
@@ -96,17 +110,21 @@ const styles = StyleSheet.create({
   day:{
     // flex:1,
     width:SCREEN_WIDTH,
-    alignItems:'center',
+    // alignItems:'',
     // backgroundColor:'cyan',
+    // flexDirection:'row'
   },
   temp:{
     marginTop:50,
     fontWeight:'600',
-    fontSize:128,
+    fontSize:100,
   },
   description:{
     fontSize:60,
     marginTop:-30
+  },
+  forecast:{
+    flexDirection:'row'
   },
   
 });
